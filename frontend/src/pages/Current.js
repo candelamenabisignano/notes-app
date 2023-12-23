@@ -32,9 +32,9 @@ const Current = () => {
     if(navigate) return <Navigate to='/login'/>
   return (
     <div className='flex'>
-        <Header/>
+    <Header/>
     <div className='flex justify-center items-center h-[100vh] m-auto'>
-        <div className='absolute top-2 left-[100px]'>
+        <div className='flex justify-start'>
         <h1>hola {user.username}!</h1>
         </div>
     </div>
