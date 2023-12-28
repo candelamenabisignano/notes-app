@@ -18,6 +18,8 @@ const usersSchema= new mongoose.Schema({
     phone:String
 });
 
-
+usersSchema.pre(['find', 'findOne'],function(){
+    this.populate('notes')
+})
 const usersModel= mongoose.model(usersCollection,usersSchema);
 export default usersModel;

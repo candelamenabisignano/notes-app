@@ -23,7 +23,7 @@ const getOne=async(req,res)=>{
 
 const register=async(req,res)=>{
     try {
-        const {first_name,last_name,email,user_name,age,password,notes,phone}= req.body;
+        const {first_name,last_name,email,username,age,password,notes,phone}= req.body;
         const exists= await usersService.getOneService(email);
 
         if(exists){
@@ -33,7 +33,7 @@ const register=async(req,res)=>{
         const user={
             first_name,
             last_name,
-            user_name,
+            username,
             email,
             age,
             notes,
@@ -61,7 +61,6 @@ const login=async(req,res)=>{
         req.user=exists;
         const {password:_, ...userToken}=exists._doc;
         const token= generateToken(userToken);
-        console.log(userToken)
         return res.cookie('userCookie', token, {maxAge:100*100*100, httpOnly:true}).send({status:'success', payload:{user:req.user, token:token}});
     } catch (error) {
         res.status(500).send({status:'error', error:error.message})
@@ -69,7 +68,7 @@ const login=async(req,res)=>{
 };
 const current=async(req,res)=>{
     try {
-        if(req.user=== null||undefined){
+        if(req.user=== null|| req.user=== undefined){
             return res.status(401).send({status:"error", error:'invalid credentials'})
         };
         res.send({status:'success', payload:req.user})
@@ -82,10 +81,10 @@ const authToken=(req,res,next)=>{
     if(!token){
         return res.status(401).send({status:"error", error:'token not found'})
     };
-    console.log('tengo token')
     jwt.verify(token,PRIVATE_KEY,(err,credentials)=>{
         if(err) return res.status(404).send({status:'error', error:'token not found'});
         req.user=credentials.user;
+        console.log(req.user)
         next()
     });
 };

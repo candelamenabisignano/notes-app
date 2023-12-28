@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import { Navigate } from "react-router-dom";
+import { handleRegister } from "../services/Services";
 const SignUpView = () => {
   const [user, setUser] = useState({});
   const [goToLogin, setGoToLogin] = useState(false);
-  const register = async (e) => {
-    try {
-      e.preventDefault();
-      const info = await fetch("http://localhost:8080/api/users/register", {
-        method: "POST",
-        body: JSON.stringify(user),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (info.status === 201) {
-        setTimeout(() => {
-          
-          setGoToLogin(true);
-        }, 1000);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  if(goToLogin) return ( <Navigate to={'/login'}/>)
+  if(goToLogin) return <Navigate to={'/login'}/>;
   return (
     <>
       <main className="flex justify-center items-center h-[100vh] gap[200px] ">
@@ -42,6 +23,12 @@ const SignUpView = () => {
                   <input
                     name="first_name"
                     type="text"
+                    onChange={(e) => {
+                      setUser({
+                        ...user,
+                        [e.currentTarget.name]: e.currentTarget.value,
+                      });
+                    }}
                     className="border-solid border-b-[2px] outline-none bg-transparent border-black rounded-[2px] w-[172.891px] focus-visible:border-blue-500 focus-visible:text-blue-500"
                   />
                 </div>
@@ -151,7 +138,7 @@ const SignUpView = () => {
               <div className="flex relative right-[15px] bottom-[40px]">
               <Button
                 title={"enviar"}
-                onClick={(e) => register(e)}
+                onClick={(e) => handleRegister(e, user, setGoToLogin)}
                 styles={
                   "relative py-2 px-8  text-base font-bold rounded-[50px] overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-blue-500 before:to-blue-300 before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-[50px] hover:before:left-0"
                 }

@@ -1,31 +1,20 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
 import { Navigate} from "react-router-dom";
+import { handleLogin } from "../services/Services";
 
 const LoginView = () => {
   const [user, setUser]=useState({});
-  const[goToProfile,setGoToProfile]=useState(false)
-  if(goToProfile){
-    return <Navigate to={'/profile/current'}/>
+  const[goToProfile,setGoToProfile]=useState(false);
+  const handleNavigate=async()=>{
+    new Promise(() => {
+      setTimeout(()=>{
+        setGoToProfile(true);
+      },2000);
+    })
   }
-  const handleNavigate=()=>{
-    setGoToProfile(true);
-  }
-  const handlelogin=async(e)=>{
-    try {
-      e.preventDefault()
-      const info=await fetch("http://localhost:8080/api/users/login",{
-        method:'POST',
-        credentials:'include',
-        body:JSON.stringify(user),
-        headers:{
-          "Content-Type": "application/json",
-        }
-      });
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
+  if(goToProfile) return <Navigate to={'/profile/current'}/>;
+
   return (
     <main className="flex justify-center items-center h-[100vh] gap-[100px] ">
       <section className="flex flex-col">
@@ -46,7 +35,7 @@ const LoginView = () => {
               </label>
               <input
                 name="email"
-                type="text"
+                type="email"
                 className="border-solid border-b-[2px] outline-none bg-transparent border-black rounded-[2px] w-[241px]"
                 onChange={(e) => {
                   setUser({...user, [e.currentTarget.name]:e.currentTarget.value})
@@ -62,7 +51,6 @@ const LoginView = () => {
                 type="password"
                 className="border-solid border-b-[2px] outline-none bg-transparent border-black rounded-[2px] w-[241px]"
                 onChange={(e) => {
-                  console.log(e.currentTarget.value)
                   setUser({...user, [e.currentTarget.name]:e.currentTarget.value})
                 }}
               />
@@ -73,7 +61,7 @@ const LoginView = () => {
                 "relative bottom-[25px] py-2 px-8  text-base font-bold rounded-[50px] overflow-hidden bg-white transition-all duration-400 ease-in-out shadow-md hover:scale-105 hover:text-white hover:shadow-lg active:scale-90 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-blue-500 before:to-blue-300 before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-[50px] hover:before:left-0"
               }
               onClick={(e)=>{
-                handlelogin(e)
+                handleLogin(e,user)
                 handleNavigate()}}
             />
           </form>

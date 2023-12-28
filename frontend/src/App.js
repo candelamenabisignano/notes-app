@@ -3,7 +3,8 @@ import { BrowserRouter,Route,Routes } from 'react-router-dom';
 import MainView from './pages/MainView';
 import LoginView from './pages/LoginView';
 import SignUpView from './pages/SignUpView';
-import Current from './pages/Current';
+import CurrentProfile from './pages/CurrentProfile';
+import CurrentNote from './pages/CurrentNote';
 
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
         <Route path='/' element={<MainView/>}/>
         <Route path='/login' element={<LoginView/>}/>
         <Route path='/signup' element={<SignUpView/>}/>
-        <Route path='/profile/current' element={<Current/>}/>
+        <Route path='/profile/current' element={<CurrentProfile/>}/>
+        <Route path='/notes/:nid' element={<CurrentNote/>}/>
       </Routes>
       </BrowserRouter>
     </div>
