@@ -4,7 +4,7 @@ const notesCollection= 'notes';
 
 const notesSchema= new mongoose.Schema({
     title: String,
-    hour: String,
+    created_at: String,
     content:String,
     user:String
 });

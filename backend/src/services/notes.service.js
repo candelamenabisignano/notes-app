@@ -8,16 +8,29 @@ const getAllService=async()=>{
 };
 
 const getOneService=async(id)=>{
-    const user= await manager.getOne(id);
-    return user
+    const note= await manager.getOne(id);
+    return note;
 };
 
-const registerService=async(user)=>{
-    const newUser= await manager.create(user);
-    return newUser;
+const createService=async(note)=>{
+    const newNote= await manager.create(note);
+    return newNote;
 };
 
-const uptadeOneService=async(id,user)=>{
-    const newUser= await manager.uptade(id,user);
-    return newUser;
+const uptadeService=async(id,note)=>{
+    const newNote= await manager.uptade(id,note);
+    return newNote;
 };
+
+const deleteService=async(id)=>{
+    const notes= await manager.delete(id);
+    return notes;
+};
+
+export{
+    getAllService,
+    getOneService,
+    createService,
+    uptadeService,
+    deleteService
+}
