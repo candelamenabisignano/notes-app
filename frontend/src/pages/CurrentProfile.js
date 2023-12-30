@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Header from "../components/Header.js";
 import OutsideNote from "../components/OutsideNote.js";
 import { CurrentPromise } from "../services/Services.js";
@@ -25,10 +25,12 @@ const CurrentProfile = () => {
         </div>
         <div className="w-[90%]">
             <section className="flex flex-wrap gap-5 justify-center">
-                <article className="flex flex-col justify-center items-center gap-3 bg-white shadow-xl h-[170px] w-[170px] p-[5px] overflow-hidden cursor-pointer transition-all ease-in-out hover:scale-105 hover:text-blue-500">
+              <Link to={'/notes/addView'}>
+              <article className="flex flex-col justify-center items-center gap-3 bg-white shadow-xl h-[170px] w-[170px] p-[5px] overflow-hidden cursor-pointer transition-all ease-in-out hover:scale-105 hover:text-blue-500">
                     <GrAddCircle size={'50px'}/>
                     <p>add note</p>
                 </article>
+              </Link>
                 {notes.map(n=>(
                     <OutsideNote id={n._id} title={n.title} content={n.content}/>
                 ))}

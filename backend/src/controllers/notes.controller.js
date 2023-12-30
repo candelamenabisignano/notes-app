@@ -1,5 +1,6 @@
 import * as notesService from '../services/notes.service.js';
 import { uptadeOneService } from '../services/users.service.js';
+import { generateToken } from '../utils.js';
 const getAllNotes=async(req,res)=>{
     try {
         const notes= await notesService.getAllService();
@@ -23,20 +24,21 @@ const getOneNote=async(req,res)=>{
 const createNote=async(req,res)=>{
     try {
         const {title,content}=req.body;
-        const user= req.user
+        const user= req.user;
+        const token= req.headers['authorization'];
         if(!title || ! content){
             return res.status(400).send({status:'error', error:'the title or content is missing'});
         };
 
         const newNote={
-            title,
-            content,
+            title:title,
+            content:content,
             created_at: new Date().toLocaleDateString(),
             user:user?._id
         };
+
         const note= await notesService.createService(newNote, user);
-        await uptadeOneService(user.email, {...user, notes:[...user.notes, note._id]})
-        return res.status(201).send({status:'success', payload:note});
+        return res.cookie('userCookie', token, {maxAge:10000*10000*10000, httpOnly:true}).send({status:'success', payload:note});
     } catch (error) {
         return res.status(500).send({status:"error", error:error.message});
     };

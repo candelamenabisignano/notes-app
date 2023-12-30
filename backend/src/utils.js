@@ -10,7 +10,7 @@ const PRIVATE_KEY= configs.privateKey;
 
 
 const generateToken=(user)=>{ //lo que vamos a meter a ese JWT
-    const token= jwt.sign({user}, PRIVATE_KEY, {expiresIn:'18h'});
+    const token= jwt.sign({user}, PRIVATE_KEY, {expiresIn:'1000h'});
     return token;
 };
 

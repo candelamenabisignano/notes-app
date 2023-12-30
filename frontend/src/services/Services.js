@@ -1,3 +1,5 @@
+
+
 const handleRegister = async (e,user, setGoToLogin) => {
     try {
       e.preventDefault();
@@ -20,10 +22,10 @@ const handleRegister = async (e,user, setGoToLogin) => {
     }
   };
 
-const handleLogin=async(e,user)=>{
+const handleLogin=async(e,user, setToken)=>{
     try {
       e.preventDefault()
-      await fetch("http://localhost:8080/api/users/login",{
+      const info=await fetch("http://localhost:8080/api/users/login",{
         method:'POST',
         credentials:'include',
         body:JSON.stringify(user),
@@ -31,13 +33,16 @@ const handleLogin=async(e,user)=>{
           "Content-Type": "application/json",
         }
       });
+      const header= info.headers;
+      const token= header.get('authorization');
+      console.log(token)
+      return setToken(token)
     } catch (error) {
       console.log(error.message)
     }
   }
 
 const CurrentPromise=(setNavigate, setUser, setNotes)=>{
-    console.log('promise')
     new Promise(()=>{
         setTimeout(() => {
             fetch('http://localhost:8080/api/users/profile/current',{
@@ -75,6 +80,24 @@ const Note=async(id,setNote)=>{
     };
 };
 
+const addNote=async(note,setNote)=>{
+  try {
+    const info=await fetch('http://localhost:8080/api/notes',{
+      method:'POST',
+      credentials:'include',
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(note)
+    })
+    const data= await info.json();
+    const newNote= data.payload;
+    return setNote(newNote)
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 
-export {CurrentPromise, handleLogin, handleRegister, Note}
+
+export {CurrentPromise, handleLogin, handleRegister, Note, addNote}

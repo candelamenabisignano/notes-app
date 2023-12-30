@@ -1,8 +1,12 @@
 import React, {  useState } from 'react'
 import { GrAddCircle, GrFormNext, GrFormSearch, GrLogout, GrTrash } from "react-icons/gr"
 import HeaderList from './HeaderList'
+import { useLocation } from 'react-router-dom';
 const Header = () => {
-  const [header, setHeader]= useState(false)
+  const [header, setHeader]= useState(false);
+  const [filter, setFilter]=useState("")
+  const location= useLocation().pathname.split('/')[1];
+
   return (
     <aside className={` overflow-hidden sticky h-screen ${header ? 'w-[280px]' : 'w-[70px]'} transition-all ease-in-out duration-500 bg-white border-r-[1px] border-gray-400 py-[10px]`}>
       <nav className='h-full flex flex-col gap-[20px]'>
@@ -15,10 +19,16 @@ const Header = () => {
         <div className='flex justify-start pl-[20px] items-center gap-5'>
         <ul>
           <div className='items-center flex-col justify-start'>
-          <div className='flex justify-start  items-center h-8 w-[100%] '>
-          <GrFormSearch size={'35px'} onClick={()=> setHeader(true)} className='hover:cursor-pointer hover:text-blue-500'/>
-            <input type='search' placeholder='search note...' className={`h-9 outline-none rounded-sm relative left-1 border-[1px] border-gray-400 focus:placeholder:text-blue-500 focus:border-[2px] focus:transition-none focus:border-blue-500 ${!header && 'scale-0'} origin-left transition-transform ease-[cubic-bezier(.27, 1.35, 0.17, 0.99)] duration-500 `}/>
+          {
+            location !== 'notes' ? (
+              <div className={`flex justify-start  items-center h-8 w-[100%]`}>
+          <GrFormSearch size={'35px'} onClick={()=> header ? setFilter(filter) :  setHeader(true)} className='hover:cursor-pointer hover:text-blue-500'/>
+            <input type='search' value={filter} onChange={(e)=> {setFilter(e.target.value)}} placeholder='search note...' className={`h-9 outline-none rounded-sm relative left-1 border-[1px] border-gray-400 focus:placeholder:text-blue-500 focus:border-[2px] focus:transition-none focus:border-blue-500 ${!header && 'scale-0'} origin-left transition-transform ease-[cubic-bezier(.27, 1.35, 0.17, 0.99)] duration-500 `}/>
           </div>
+            ) : (
+              null
+            )
+          }
           <HeaderList text={'add'} icon={<GrAddCircle size={'35px'}/>} active={header}/>
           <HeaderList text={'delete'} icon={<GrTrash size={'35px'}/>} active={header}/>
           <HeaderList text={'logout'} icon={<GrLogout size={'35px'} className='relative left-1'/>} active={header}/>

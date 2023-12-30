@@ -61,7 +61,8 @@ const login=async(req,res)=>{
         req.user=exists;
         const {password:_, ...userToken}=exists._doc;
         const token= generateToken(userToken);
-        return res.cookie('userCookie', token, {maxAge:100*100*100, httpOnly:true}).send({status:'success', payload:{user:req.user, token:token}});
+        res.s
+        return res.header('Authorization',`Bearer ${token}`).send({status:'success', message:'login succeed'})
     } catch (error) {
         res.status(500).send({status:'error', error:error.message})
     }
@@ -71,20 +72,24 @@ const current=async(req,res)=>{
         if(req.user=== null|| req.user=== undefined){
             return res.status(401).send({status:"error", error:'invalid credentials'})
         };
-        res.send({status:'success', payload:req.user})
+        res.send({status:'success', payload:{user:req.user, token: req.headers['authorization']}})
     } catch (error) {
         res.status(500).send({status:'error', error:error.message})
     }
 }
 const authToken=(req,res,next)=>{
-    let token= req.cookies.userCookie;
+    let token= req.headers['authorization'];
     if(!token){
         return res.status(401).send({status:"error", error:'token not found'})
+    }else{
+        const bearer = token.split(' ');
+        token = bearer[1];
     };
+
     jwt.verify(token,PRIVATE_KEY,(err,credentials)=>{
         if(err) return res.status(404).send({status:'error', error:'token not found'});
         req.user=credentials.user;
-        console.log(req.user)
+        req.headers['authorization']=token;
         next()
     });
 };
